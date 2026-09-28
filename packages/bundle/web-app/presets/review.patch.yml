@@ -1,0 +1,79 @@
+# Agent preset review: one `@deepseek-ai/dsh-agent-preset` declaration inserted
+# after the web patch. Edits saved from the Web editor override this row's
+# `config.plugins` by id from the profile patch.
+- insert:
+    - id: preset-review
+      name: '@deepseek-ai/dsh-agent-preset'
+      config:
+        id: review
+        order: 2
+        plugins:
+          # The reviewer identity plus the report-only contract. The roster below
+          # is what makes the contract a boundary rather than a request: it mounts
+          # no file-editing tool, so `standard`'s `write` and `edit` are absent by
+          # construction and the prompt only has to say what a report owes.
+          - id: persona
+            name: '@deepseek-ai/dsh-persona'
+            config:
+              prefix: You are a code review agent powered by the {{model}} model.
+              suffix: |-
+                Your working directory is {{cwd}}.
+
+                Review the code you are asked about and report findings. This mode's tool catalog contains no file-editing tool, so do not fix, refactor, or patch what you review: report what should change, with file and line references, and leave the change to the user.
+
+                Ground every finding in what you read or ran. Cite `path:line` and quote the line that proves the claim, and mark anything you inferred without reading as unverified. Read files with line-ranged shell commands such as `sed -n '10,25p' file`, or with glob and grep, rather than dumping whole files.
+
+                Rank findings and keep the report short: correctness bugs, unhandled edge cases, security and data-loss risks, and the test gaps that let them through come first; naming, style, and formatting last. State each finding's impact in one sentence, separate confirmed defects from questions and nits, and when the code is sound say so and name what you verified.
+
+                Run tests, type checks, linters, and read-only shell commands when they support a finding. Do not install dependencies or modify the repository, and do not report a check as passing unless it ran.
+          - id: agent-instructions
+            name: '@deepseek-ai/dsh-agent-instructions'
+            config:
+              maxBytes: 65536
+          - id: tool-bash
+            name: '@deepseek-ai/dsh-tool-bash'
+            disabled: !!js process.platform === 'win32'
+          - id: tool-pwsh
+            name: '@deepseek-ai/dsh-tool-pwsh'
+            disabled: !!js process.platform !== 'win32'
+          # Search without mutation: `read` ships inside `dsh-tool-fs` together
+          # with `write` and `edit`, so mounting it would hand the reviewer the
+          # very tools this preset exists to withhold.
+          - id: tool-fs-search
+            name: '@deepseek-ai/dsh-tool-fs-search'
+            config:
+              sampleOverCapGlobResults: false
+          - id: tool-jobs
+            name: '@deepseek-ai/dsh-tool-jobs'
+          - id: skill-filesystem
+            name: '@deepseek-ai/dsh-skill-filesystem'
+          - id: tool-skill
+            name: '@deepseek-ai/dsh-tool-skill'
+          - id: compaction
+            name: cordis:group
+            group: true
+            isolate:
+              compaction: true
+              toolResultPruner: true
+            config:
+              - id: compaction-basic
+                name: '@deepseek-ai/dsh-compaction-basic'
+              - id: command-compact
+                name: '@deepseek-ai/dsh-command-compact'
+              - id: tool-result-pruner
+                name: '@deepseek-ai/dsh-compaction-tool-result-pruner'
+                config:
+                  thresholdChars: 8192
+                  headChars: 4096
+                  tailChars: 1024
+          - id: tool-ask-user
+            name: '@deepseek-ai/dsh-tool-ask-user'
+          - id: tool-todo
+            name: '@deepseek-ai/dsh-tool-todo'
+            config:
+              allowParallelInProgress: true
+          - id: tool-web
+            name: '@deepseek-ai/dsh-tool-web'
+            config:
+              fetch: true
+              searchTimeoutMs: 60000

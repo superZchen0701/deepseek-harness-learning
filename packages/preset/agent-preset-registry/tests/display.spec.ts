@@ -21,6 +21,13 @@ describe('presetDisplayText', () => {
       .toEqual({ name: '我的模式', description: '自述' })
   })
 
+  it('resolves the review preset through its own dictionary keys', () => {
+    expect(presetDisplayText({ id: 'review' }, t)).toEqual({
+      name: 't:presetReviewName',
+      description: 't:presetReviewDescription',
+    })
+  })
+
   it('falls back to the id for a preset publishing no metadata', () => {
     // A system id outside the shipped set behaves like authored metadata:
     // there is no dictionary copy to resolve.
