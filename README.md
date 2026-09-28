@@ -8,6 +8,65 @@ It is built on an **everything-is-a-plugin** architecture and powered by [Cordis
 
 Documentation: [https://deepseek-harness.github.io/deepseek-harness/](https://deepseek-harness.github.io/deepseek-harness/)
 
+**This repository is a fork of the official deepseek-ai/deepseek-harness repository for secondary development, intended mainly for developer learning.**
+
+## Syncing code from the official deepseek-ai/deepseek-harness repository
+
+To sync the latest code from the official deepseek-ai/deepseek-harness repository:
+
+```sh
+# 1. Add the official repository as upstream
+git remote add upstream https://github.com/deepseek-ai/deepseek-harness.git
+# Verify:
+git remote -v
+# You should see:
+origin
+https://github.com/yourname/deepseek-harness-learning.git
+upstream
+https://github.com/deepseek-ai/deepseek-harness.git
+
+# 2. Fetch the latest code from the official repository
+git fetch upstream
+# Inspect:
+git log upstream/master
+
+# 3. Update your master
+# Switch:
+git checkout master
+# Merge:
+git merge upstream/master
+# Resolve conflicts; if there are none, just push:
+git push origin master
+```
+
+Following these steps keeps this repository in sync with the official deepseek-ai/deepseek-harness repository.
+
+## Development suggestions for this repository
+
+### Create your own development branch (strongly recommended)
+
+Do not keep committing to master. If you prefer not to create your own feat branches, you can develop on a develop branch:
+
+```sh
+git checkout -b develop
+# Push when development is done:
+git push -u origin develop
+```
+
+Going forward:
+
+```sh
+master
+ |
+ |---Sync DeepSeek official
+ |
+develop
+ |
+ |---Your Agent experiments
+ |---Your plugins
+ |---Your business code
+```
+
 ## Developer preview
 
 DeepSeek Harness is in _developer preview_ and iterating rapidly. **THERE WILL BE COMPATIBILITY-BREAKING CHANGES.**

@@ -8,6 +8,65 @@ DeepSeek Harness（`dsh`）是由 [DeepSeek AI](https://deepseek.com) 开发的�
 
 文档：[https://deepseek-harness.github.io/deepseek-harness/](https://deepseek-harness.github.io/deepseek-harness/)
 
+**本仓库是基于官方deepseek-ai/deepseek-harness仓库进行二次开发，主要用于开发者学习使用。**
+
+## 同步官方deepseek-ai/deepseek-harness仓库代码
+
+如果需要同步官方deepseek-ai/deepseek-harness仓库的最新代码，可以这么做：
+
+```sh
+# 1. Add the official repository as upstream
+git remote add upstream https://github.com/deepseek-ai/deepseek-harness.git
+# Verify:
+git remote -v
+# You should see:
+origin
+https://github.com/yourname/deepseek-harness-learning.git
+upstream
+https://github.com/deepseek-ai/deepseek-harness.git
+
+# 2. Fetch the latest code from the official repository
+git fetch upstream
+# Inspect:
+git log upstream/master
+
+# 3. Update your master
+# Switch:
+git checkout master
+# Merge:
+git merge upstream/master
+# Resolve conflicts; if there are none, just push:
+git push origin master
+```
+
+按照上述步骤操作，可以保证本仓库代码始终和官方deepseek-ai/deepseek-harness仓库保持一致。
+
+## 本仓库开发建议
+
+### 建立自己的开发分支（强烈建议）
+
+不要以后一直改 master，如果不想创建自己的feat分支，可以选择在develop分支上开发：
+
+```sh
+git checkout -b develop
+# Push when development is done:
+git push -u origin develop
+```
+
+以后：
+
+```sh
+master
+ |
+ |---Sync DeepSeek official
+ |
+develop
+ |
+ |---Your Agent experiments
+ |---Your plugins
+ |---Your business code
+```
+
 ## 开发者预览
 
 DeepSeek Harness 处于 _开发者预览_ 阶段，正在快速迭代。**未来将出现破坏兼容性的变更。**
